@@ -20,26 +20,40 @@ interface Student {
 }
 
 class Gradebook<T extends Student> {
-  students = []
+  students:T[] = []
 
-  addStudent(student) {
-
+  addStudent(student:T): string {
+    this.students.push(student)
+    return `${student.name} added to the gradebook.`
   }
 
-  addGrade(id, grade) {
-
+  addGrade(id:number, grade:Grade): string {
+    const student = this.students.find(student => student.id === id)
+    student.grades.push(grade)
+    return `Grade recorded for ${grade.subject}.`
   }
 
-  getAverageGrade(id) {
-
+  getAverageGrade(id: number): string {
+    const student = this.students.find(student => student.id === id)
+    let total: number = 0
+    let average: number = 0
+    student.grades.forEach( item => {
+      total += item.grade
+    })
+    average = total/ student.grades.length
+    return `${student.name}'s average grade is ${average}`
   }
 
-  getStudentGrades(id) {
-
+  getStudentGrades(id: number): T {
+    const student = this.students.find(student => student.id === id)
+    return student
   }
 
-  updateSubjectGrade(id, subject, newGrade) {
-
+  updateSubjectGrade(id: number, subject: string, newGrade: number): string {
+    const student = this.students.find(student => student.id === id)
+    const updateSubject = student.grades.find(student => student.subject === subject)
+    updateSubject.grade = newGrade
+    return `${student.name} update ${updateSubject.subject} : ${updateSubject.grade}`
   }
 }
 
